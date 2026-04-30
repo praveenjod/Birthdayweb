@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday | A Journey for You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&family=Playfair+Display:italic,wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #050505;
+            --accent-primary: #ff3366; /* Hot Pink */
+            --accent-secondary: #7000ff; /* Electric Purple */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom 2025 cursor */
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow: hidden; /* Controlled journey */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* --- 2025 Custom Cursor --- */
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        /* --- Background Particles --- */
+        #canvas-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* --- Sections Container --- */
+        .journey-container {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        section {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(20px) scale(0.98);
+        }
+
+        section.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0) scale(1);
+        }
+
+        /* --- Typography & UI Components --- */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 10vw, 6rem);
+            line-height: 1;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 2rem;
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            color: var(--text-main);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: var(--accent-primary);
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* --- Stage 1: The Intro --- */
+        #intro p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Stage 2: Bento Grid Memories --- */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            width: 90%;
+            max-width: 1000px;
+            height: 60vh;
+        }
+
+        .bento-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            transition: transform 0.4s ease, border 0.4s ease;
+        }
+
+        .bento-item:hover {
+            transform: scale(1.02);
+            border-color: var(--accent-secondary);
+            color: var(--text-main);
+        }
+
+        .large { grid-column: span 2; }
+        .tall { grid-row: span 2; }
+
+        /* --- Stage 3: The Big Reveal --- */
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            background: var(--accent-primary);
+            position: relative;
+            border-radius: 10px;
+            animation: bounce 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- Stage 4: The Final Note --- */
+        .final-letter {
+            max-width: 800px;
+            line-height: 1.8;
+            font-size: 1.2rem;
+            text-align: left;
+        }
+
+        .confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                overflow-y: auto;
+                height: 70vh;
+            }
+            .large, .tall { grid-column: span 1; grid-row: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <canvas id="canvas-particles"></canvas>
+    <canvas id="confetti" class="confetti-canvas"></canvas>
+
+    <main class="journey-container">
+        
+        <!-- STAGE 1: INTRO -->
+        <section id="intro" class="active">
+            <p>01 // THE BEGINNING</p>
+            <h1>Today is <br><span class="gradient-text">Different.</span></h1>
+            <div class="glass-card">
+                Today, the world got a little bit brighter. I've prepared a small journey to celebrate the most incredible person I know.
+            </div>
+            <button onclick="nextStage('memories')">Enter the Story</button>
+        </section>
+
+        <!-- STAGE 2: MEMORIES -->
+        <section id="memories">
+            <p>02 // WHY YOU'RE SPECIAL</p>
+            <div class="bento-grid">
+                <div class="bento-item large">Your laugh is literally my favorite sound in the world.</div>
+                <div class="bento-item tall">The way you handle challenges with so much grace.</div>
+                <div class="bento-item">Pure Kindness.</div>
+                <div class="bento-item">Unstoppable Energy.</div>
+                <div class="bento-item large">You make every boring moment feel like a highlight.</div>
+            </div>
+            <button onclick="nextStage('reveal')">Keep Going...</button>
+        </section>
+
+        <!-- STAGE 3: THE REVEAL -->
+        <section id="reveal">
+            <p>03 // THE MOMENT</p>
+            <div class="gift-box" onclick="celebrate()">🎁</div>
+            <h1 style="margin-top: 2rem;">Tap to <span class="gradient-text">Celebrate</span></h1>
+            <p style="color: var(--text-dim); margin-top: 1rem;">(Click the gift box)</p>
+        </section>
+
+        <!-- STAGE 4: FINAL MESSAGE -->
+        <section id="final">
+            <h1>Happy Birthday, <br><span class="gradient-text">Beautiful.</span></h1>
+            <div class="glass-card final-letter">
+                Dear You,<br><br>
+                Happy Birthday! Another year of you making the world a better place just by being in it. You are my favorite person, my greatest inspiration, and the best part of my day. I hope this year brings you as much happiness as you give to everyone around you.<br><br>
+                With all my love,<br>
+                — Me
+            </div>
+            <button onclick="restart()">Relive the Magic</button>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Custom Cursor ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => cursor.style.transform = 'scale(0.8)');
+        document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+
+        // --- Background Particles ---
+        const canvas = document.getElementById('canvas-particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+            });
+            requestAnimationFrame(drawParticles);
+        }
+
+        // --- Stage Management ---
+        function nextStage(stageId) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(stageId).classList.add('active');
+        }
+
+        function restart() {
+            nextStage('intro');
+        }
+
+        // --- Confetti / Celebration Logic ---
+        const confCanvas = document.getElementById('confetti');
+        const confCtx = confCanvas.getContext('2d');
+        let confettiPieces = [];
+
+        function celebrate() {
+            confCanvas.width = window.innerWidth;
+            confCanvas.height = window.innerHeight;
+            
+            for(let i=0; i<150; i++) {
+                confettiPieces.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    size: Math.random() * 8 + 4,
+                    color: i % 2 === 0 ? '#ff3366' : '#7000ff',
+                    velX: (Math.random() - 0.5) * 15,
+                    velY: (Math.random() - 0.7) * 15,
+                    gravity: 0.2,
+                    rotation: Math.random() * 360
+                });
+            }
+            
+            setTimeout(() => {
+                nextStage('final');
+            }, 1500);
+
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            if (confettiPieces.length === 0) return;
+            confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+            confettiPieces.forEach((p, i) => {
+                p.velY += p.gravity;
+                p.x += p.velX;
+                p.y += p.velY;
+                p.rotation += 5;
+                
+                confCtx.save();
+                confCtx.translate(p.x, p.y);
+                confCtx.rotate(p.rotation * Math.PI / 180);
+                confCtx.fillStyle = p.color;
+                confCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                confCtx.restore();
+
+                if (p.y > confCanvas.height) confettiPieces.splice(i, 1);
+            });
+            requestAnimationFrame(animateConfetti);
+        }
+
+        // Initialization
+        initParticles();
+        drawParticles();
+        window.onresize = initParticles;
+
+    </script>
+</body>
+</html>
